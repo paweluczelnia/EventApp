@@ -62,6 +62,7 @@ public class Login extends AppCompatActivity {
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else{
                             Toast.makeText(Login.this,"Nie udało się zalogować!" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();
+                            progressBar2.setVisibility(View.GONE);
                         }
                     }
                 });
