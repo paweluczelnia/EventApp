@@ -66,8 +66,8 @@ public class Register extends AppCompatActivity {
                 String email = mEmail.getText().toString().trim();
                 String password = mPassword.getText().toString().trim();
                 String confirm_password = mConfirmPass.getText().toString().trim();
-                String nick = mNick.getText().toString();
-                String phone = mPhone.getText().toString();
+                String nick = mNick.getText().toString().trim();
+                String phone = mPhone.getText().toString().trim();
                 //mini walidacja
                 if(TextUtils.isEmpty(email)){
                     mEmail.setError("Email jest wymagany");
@@ -119,12 +119,15 @@ public class Register extends AppCompatActivity {
                             user.put("nick",nick);
                             user.put("email",email);
                             user.put("phone",phone);
-                            documentReference.set(user).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            documentReference.set(user).addOnSuccessListener((OnSuccessListener) (aVoid) ->{
+                                    Log.d(TAG,"User profile is created for " + userID);
+                            }).addOnFailureListener(new OnFailureListener() {
                                 @Override
-                                public void onSuccess(Void aVoid) {
-                                    Log.d(TAG, "Utworzono użytkownika " + userID);
+                                public void onFailure(@NonNull Exception e) {
+                                    Log.d(TAG, "onFailure:  " + e.toString());
                                 }
                             });
+
                             startActivity(new Intent(getApplicationContext(), MainActivity.class));
                         }else{
                             Toast.makeText(Register.this, "Error!" + task.getException().getMessage(),Toast.LENGTH_SHORT).show();

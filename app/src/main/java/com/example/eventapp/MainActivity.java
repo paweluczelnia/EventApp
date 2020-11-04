@@ -42,6 +42,12 @@ public class MainActivity extends AppCompatActivity {
         userId = fAuth.getCurrentUser().getUid();
         FirebaseUser user = fAuth.getCurrentUser();
 
+        DocumentReference documentReference = fStore.collection("user").document(userId);
+        documentReference.addSnapshotListener(this, (documentSnapshot, e) -> {
+           phone.setText(documentSnapshot.getString("phone"));
+           nick.setText(documentSnapshot.getString("nick"));
+           email.setText(documentSnapshot.getString("email"));
+        });
         if(!user.isEmailVerified()){
             resendCode.setVisibility(View.VISIBLE);
             verifyMsg.setVisibility(View.VISIBLE);
@@ -67,12 +73,6 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
-        DocumentReference documentReference = fStore.collection("users").document(userId);
-        documentReference.addSnapshotListener(this, (documentSnapshot, e) -> {
-           phone.setText(documentSnapshot.getString("phone"));
-           nick.setText(documentSnapshot.getString("nick"));
-           email.setText(documentSnapshot.getString("email"));
-        });
     }
     public void logout(View v){
         FirebaseAuth.getInstance().signOut();
