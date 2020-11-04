@@ -1,8 +1,10 @@
 package com.example.eventapp;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -14,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +25,7 @@ import com.google.firebase.auth.FirebaseAuth;
 public class Login extends AppCompatActivity {
     EditText mEmail, mPassword;
     Button mLoginBtn;
-    TextView mCreateBtn;
+    TextView mCreateBtn, mForgetPass;
     FirebaseAuth fAuth;
     ProgressBar progressBar2;
     @Override
@@ -33,6 +37,7 @@ public class Login extends AppCompatActivity {
         mPassword = findViewById(R.id.password);
         mLoginBtn = findViewById(R.id.login);
         mCreateBtn = findViewById(R.id.nie_masz_konta);
+        mForgetPass = findViewById(R.id.forget_pass);
         fAuth = FirebaseAuth.getInstance();
         progressBar2= findViewById(R.id.progressBar2);
 
@@ -72,6 +77,42 @@ public class Login extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getApplicationContext(),Register.class));
+            }
+        });
+        mForgetPass.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                EditText resetMail = new EditText(view.getContext());
+                AlertDialog.Builder passwordResetDialog = new AlertDialog.Builder(view.getContext());
+                passwordResetDialog.setTitle("Chcesz zmienić hasło?");
+                passwordResetDialog.setMessage("Podaj swój email w celu restartu hasła.");
+                passwordResetDialog.setView(resetMail);
+
+                passwordResetDialog.setPositiveButton("Tak", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        String mail = resetMail.getText().toString();
+                        fAuth.sendPasswordResetEmail(mail).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(Login.this, "Link do zrestartowania hasła został wysłany na podanego maila", Toast.LENGTH_SHORT).show();
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(Login.this,"Error!" + e.getMessage(),Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+                passwordResetDialog.setNegativeButton("Nie", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+
+                passwordResetDialog.create().show();
             }
         });
     }
