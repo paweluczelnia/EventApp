@@ -88,6 +88,10 @@ public class Register extends AppCompatActivity {
                     mPassword.setError("Hasło musi zawierać więcej niż 6 znaków");
                     return;
                 }
+                if(phone.length() != 9){
+                    mPhone.setError("Podaj numer komórkowy");
+                    return;
+                }
 
                 progressBar.setVisibility(View.VISIBLE);
 

@@ -109,7 +109,7 @@
         android:digits="0123456789+"
         android:ems="10"
         android:fontFamily="@font/aclonica"
-        android:hint="123123123"
+        android:hint="Numer telefonu"
         android:inputType="phone"
         android:textColor="#32375E"
         android:textColorHint="#32375E"

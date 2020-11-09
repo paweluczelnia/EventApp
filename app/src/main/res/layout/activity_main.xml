@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/background"
     tools:context=".MainActivity">
 
     <Button
@@ -19,28 +20,28 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.023" />
 
+    <Button
+        android:id="@+id/verifyBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zweryfikuj teraz"
+        android:visibility="gone"
+        app:iconTint="@color/design_default_color_error"
+        app:layout_constraintBottom_toTopOf="@+id/text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="127dp"
         android:layout_height="127dp"
+        android:src="@drawable/billie"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.144"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.445"
-        android:src="@drawable/billie" />
-
-    <TextView
-        android:id="@+id/profilName"
-        android:layout_width="136dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="40dp"
-        android:text="TextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.749"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text" />
+        app:layout_constraintVertical_bias="0.445" />
 
     <TextView
         android:id="@+id/profileEmail"
@@ -96,15 +97,15 @@
         app:layout_constraintVertical_bias="1.0"
         tools:layout_editor_absoluteX="-8dp" />
 
-    <Button
-        android:id="@+id/verifyBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Zweryfikuj teraz"
-        android:visibility="gone"
-        app:iconTint="@color/design_default_color_error"
-        app:layout_constraintBottom_toTopOf="@+id/text"
+    <TextView
+        android:id="@+id/profilName"
+        android:layout_width="136dp"
+        android:layout_height="39dp"
+        android:layout_marginTop="40dp"
+        android:text="TextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintHorizontal_bias="0.749"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/text" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
