@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">EventApp</string>
+    <string name="login">Login</string>
+    <string name="email">Email</string>
+    <string name="edycja_danych">Edycja danych</string>
+    <string name="telefon">Telefon</string>
+    <string name="anuluj">Anuluj</string>
+    <string name="zapisz">Zapisz</string>
 </resources>

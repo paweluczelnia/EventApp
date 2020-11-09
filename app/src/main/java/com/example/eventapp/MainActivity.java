@@ -23,7 +23,9 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
-    Button resendCode;
+    Button resendCode, changeProfileBtn;
+
+    User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,8 @@ public class MainActivity extends AppCompatActivity {
         phone = findViewById(R.id.profileNumber);
         nick = findViewById(R.id.profilName);
         email = findViewById(R.id.profileEmail);
+
+        changeProfileBtn = findViewById(R.id.changeProfile);
 
         fAuth = FirebaseAuth.getInstance();
         fStore = FirebaseFirestore.getInstance();
@@ -42,12 +46,20 @@ public class MainActivity extends AppCompatActivity {
         userId = fAuth.getCurrentUser().getUid();
         FirebaseUser user = fAuth.getCurrentUser();
 
-        DocumentReference documentReference = fStore.collection("user").document(userId);
+        DocumentReference documentReference = fStore.collection("users").document(userId);
         documentReference.addSnapshotListener(this, (documentSnapshot, e) -> {
-           phone.setText(documentSnapshot.getString("phone"));
-           nick.setText(documentSnapshot.getString("nick"));
-           email.setText(documentSnapshot.getString("email"));
+            if (documentSnapshot.exists()) {
+                String Uphone = documentSnapshot.getString("phone");
+                String Ulogin = documentSnapshot.getString("nick");
+                String Uemail = documentSnapshot.getString("email");
+                this.user = new User(Ulogin, Uemail, Uphone);
+                phone.setText(Uphone);
+                nick.setText(Ulogin);
+                email.setText(Uemail);
+            }
         });
+
+
         if(!user.isEmailVerified()){
             resendCode.setVisibility(View.VISIBLE);
             verifyMsg.setVisibility(View.VISIBLE);
@@ -59,13 +71,12 @@ public class MainActivity extends AppCompatActivity {
                     user.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
-                            Toast.makeText(view.getContext(), "Wysłano likn weryfikacyjny na podanego maila!", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(view.getContext(), "Wysłano link weryfikacyjny na podany adres e-mail!", Toast.LENGTH_SHORT).show();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d("tag", "Nie udało się wysałać emaila " + e.getMessage());
-
+                            Log.d("tag", "Nie udało się wysłać emaila " + e.getMessage());
                         }
                     });
                 }
@@ -73,7 +84,13 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        changeProfileBtn.setOnClickListener(v ->  {
+            Intent i = new Intent(v.getContext(), EditProfile.class);
+            i.putExtra("User", this.user);
+            startActivity(i);
+        });
     }
+
     public void logout(View v){
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(getApplicationContext(),Login.class));

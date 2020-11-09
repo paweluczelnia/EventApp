@@ -106,7 +106,7 @@ public class Register extends AppCompatActivity {
                             fuser.sendEmailVerification().addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override
                                 public void onSuccess(Void aVoid) {
-                                    Toast.makeText(Register.this, "Wysłano likn weryfikacyjny na podanego maila!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(Register.this, "Wysłano link weryfikacyjny na podany adres e-mail!", Toast.LENGTH_SHORT).show();
                                 }
                             }).addOnFailureListener(new OnFailureListener() {
                                 @Override
@@ -116,9 +116,9 @@ public class Register extends AppCompatActivity {
                                 }
                             });
 
-                            Toast.makeText(Register.this,"Utworzono nowe konto", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Register.this,"Utworzono nowe konto, możesz się zalogować", Toast.LENGTH_SHORT).show();
                             userID = fAuth.getCurrentUser().getUid();
-                            DocumentReference documentReference = fStore.collection("user").document(userID);
+                            DocumentReference documentReference = fStore.collection("users").document(userID);
                             Map<String,Object> user = new HashMap<>();
                             user.put("nick",nick);
                             user.put("email",email);
