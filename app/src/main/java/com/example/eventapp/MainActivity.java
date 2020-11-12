@@ -23,9 +23,10 @@ public class MainActivity extends AppCompatActivity {
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
-    Button resendCode, changeProfileBtn;
+    Button resendCode, changeProfileBtn, eventPanelBtn;
 
     User user;
+    AddEvent addEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +43,7 @@ public class MainActivity extends AppCompatActivity {
 
         resendCode = findViewById(R.id.verifyBtn);
         verifyMsg = findViewById(R.id.verificatiomMsg);
+        eventPanelBtn = findViewById(R.id.addEventPanel);
 
         userId = fAuth.getCurrentUser().getUid();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -83,11 +85,17 @@ public class MainActivity extends AppCompatActivity {
             });
 
         }
-
+        //buttons
         changeProfileBtn.setOnClickListener(v ->  {
             Intent i = new Intent(v.getContext(), EditProfile.class);
             i.putExtra("User", this.user);
             startActivity(i);
+        });
+        eventPanelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),AddEvent.class));
+            }
         });
     }
 

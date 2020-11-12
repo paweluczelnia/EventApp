@@ -9,8 +9,11 @@
 
 
     <ScrollView
+        android:id="@+id/scrollView3"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="0dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -20,12 +23,18 @@
 
     <EditText
         android:id="@+id/profileLogin"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="29dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="17dp"
         android:ems="10"
+        android:fontFamily="@font/aclonica"
         android:inputType="textPersonName"
         android:text="@string/login"
+        android:textColor="#32375E"
+        app:layout_constraintBottom_toTopOf="@+id/profileEmail"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,11 +42,14 @@
 
     <Button
         android:id="@+id/saveProfile"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:fontFamily="@font/aclonica"
         android:text="@string/zapisz"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/cancelEditProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent" />
@@ -47,21 +59,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
+        android:fontFamily="@font/aclonica"
         android:text="@string/edycja_danych"
+        android:textColor="#F352619F"
+        android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/profileLogin"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.85" />
 
     <EditText
         android:id="@+id/profilePhone"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
         android:ems="10"
+        android:fontFamily="@font/aclonica"
         android:inputType="phone"
+        android:lineSpacingExtra="8sp"
         android:text="@string/telefon"
+        android:textColor="#32375E"
+        app:layout_constraintBottom_toTopOf="@+id/saveProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,12 +92,18 @@
 
     <EditText
         android:id="@+id/profileEmail"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
         android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="21dp"
         android:ems="10"
+        android:fontFamily="@font/aclonica"
         android:inputType="textEmailAddress"
         android:text="@string/email"
+        android:textColor="#32375E"
+        app:layout_constraintBottom_toTopOf="@+id/profilePhone"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,13 +111,15 @@
 
     <Button
         android:id="@+id/cancelEditProfile"
-        android:layout_width="409dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/aclonica"
         android:text="@string/anuluj"
-        app:layout_constraintBottom_toTopOf="@+id/saveProfile"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveProfile" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
