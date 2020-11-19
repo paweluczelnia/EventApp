@@ -102,6 +102,13 @@ public class AddEvent extends AppCompatActivity {
             }
         });
 
+        mAddEventElementBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), AddEventPlan.class));
+            }
+        });
+
 
 
     }
