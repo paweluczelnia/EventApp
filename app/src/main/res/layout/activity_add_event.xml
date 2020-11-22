@@ -49,7 +49,7 @@
         android:layout_marginEnd="32dp"
         android:ems="10"
         android:fontFamily="@font/aclonica"
-        android:hint="Podaj datę wydarzenia"
+        android:hint="Data wydarzenia"
         android:inputType="date"
         android:textColorHint="#32375E"
         app:layout_constraintEnd_toEndOf="parent"
@@ -115,7 +115,7 @@
         app:srcCompat="@android:drawable/ic_dialog_map" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/eventPlace"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
@@ -136,11 +136,11 @@
         android:layout_marginTop="48dp"
         android:layout_marginEnd="72dp"
         android:fontFamily="@font/aclonica"
-        android:text='Dodaj "coś" wydarzenia'
+        android:text='Dodaj punkt wydarzenia'
         android:textColor="#32375E"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView4" />
+        app:layout_constraintTop_toBottomOf="@+id/eventPlace" />
 
     <Button
         android:id="@+id/showAllEvents"
@@ -148,7 +148,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
-        android:text="Pokaż wszytskie wydarzenia"
+        android:text="Pokaż wszystkie wydarzenia"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
