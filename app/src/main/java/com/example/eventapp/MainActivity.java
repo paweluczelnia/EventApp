@@ -1,8 +1,5 @@
 package com.example.eventapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,12 +15,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+
 public class MainActivity extends AppCompatActivity {
     TextView nick,email,phone, verifyMsg;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
-    Button resendCode, changeProfileBtn, eventPanelBtn;
+    Button resendCode, changeProfileBtn, eventPanelBtn, showAllEventsBtn;
 
     User user;
     AddEvent addEvent;
@@ -44,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
         resendCode = findViewById(R.id.verifyBtn);
         verifyMsg = findViewById(R.id.verificatiomMsg);
         eventPanelBtn = findViewById(R.id.addEventPanel);
+        showAllEventsBtn = findViewById(R.id.showAllEventsBtn);
 
         userId = fAuth.getCurrentUser().getUid();
         FirebaseUser user = fAuth.getCurrentUser();
@@ -97,6 +98,12 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(getApplicationContext(),AddEvent.class));
             }
         });
+         showAllEventsBtn.setOnClickListener(new View.OnClickListener() {
+             @Override
+             public void onClick(View view) {
+                 startActivity(new Intent(getApplicationContext(),ShowAllEvents.class));
+             }
+         });
     }
 
     public void logout(View v){

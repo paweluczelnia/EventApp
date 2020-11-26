@@ -19,4 +19,52 @@ public class Event implements Serializable {
         Name = name;
         Ticket = ticket;
     }
+
+    public String getAuthorId() {
+        return AuthorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        AuthorId = authorId;
+    }
+
+    public String getCoordinates() {
+        return Coordinates;
+    }
+
+    public void setCoordinates(String coordinates) {
+        Coordinates = coordinates;
+    }
+
+    public String getEventDate() {
+        return EventDate;
+    }
+
+    public void setEventDate(String eventDate) {
+        EventDate = eventDate;
+    }
+
+    public String getEventTime() {
+        return EventTime;
+    }
+
+    public void setEventTime(String eventTime) {
+        EventTime = eventTime;
+    }
+
+    public String getName() {
+        return Name;
+    }
+
+    public void setName(String name) {
+        Name = name;
+    }
+
+    public int getTicket() {
+        return Ticket;
+    }
+
+    public void setTicket(int ticket) {
+        Ticket = ticket;
+    }
 }
