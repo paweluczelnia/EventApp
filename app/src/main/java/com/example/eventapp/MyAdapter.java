@@ -1,43 +1,46 @@
 package com.example.eventapp;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.firebase.ui.database.FirebaseRecyclerAdapter;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
+import java.util.ArrayList;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class MyAdapter extends FirebaseRecyclerAdapter<Event,MyAdapter.MyViewHolder> {
+public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
+    Context context;
+    ArrayList<Event> events;
 
-    /**
-     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
-     * {@link FirebaseRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
-    public MyAdapter(@NonNull FirebaseRecyclerOptions<Event> options) {
-        super(options);
+    public MyAdapter(Context c, ArrayList<Event> e) {
+
+        context = c;
+        events = e;
     }
 
     @Override
-    protected void onBindViewHolder(@NonNull MyViewHolder holder, int position, @NonNull Event model) {
+    public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
 
-        holder.name.setText(model.getName());
-        holder.date.setText(model.getEventDate());
-        holder.location.setText(model.getCoordinates());
+        holder.name.setText(events.get(position).getName());
+        holder.date.setText(events.get(position).getEventDate());
+        holder.location.setText(events.get(position).getCoordinates());
 
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.event_row,parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.event_row, parent, false);
         return new MyViewHolder(view);
+    }
+
+    @Override
+    public int getItemCount(){
+        return events.size();
     }
 
     class MyViewHolder extends RecyclerView.ViewHolder{
