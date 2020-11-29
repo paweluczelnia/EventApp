@@ -58,11 +58,10 @@ public class AddEvent extends AppCompatActivity {
     String coordinates;
 
     Event event;
-    private static final String TAG = "TAG";
+
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         super.onSaveInstanceState(savedInstanceState);
-        Log.d("SAVE STATE", "onSaveInstanceState");
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -152,7 +151,7 @@ public class AddEvent extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            if (addresses.size() > 0)
+            if (addresses != null)
             {
                 String address = addresses.get(0).getAddressLine(0);
                 String[] separatedAddress = address.split(",");
@@ -184,7 +183,6 @@ public class AddEvent extends AppCompatActivity {
 
                 userID = fAuth.getCurrentUser().getUid();
                 database = FirebaseFirestore.getInstance();
-                DocumentReference reference = database.collection("events").document();
 
                 SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date date = new Date(System.currentTimeMillis());
@@ -194,35 +192,37 @@ public class AddEvent extends AppCompatActivity {
                 ev.put("name", event.Name);
                 ev.put("dataTime", event.EventDate + " " + event.EventTime);
                 ev.put("ticket", event.Ticket);
-                ev.put("authorID", userID);
+                ev.put("authorId", userID);
                 ev.put("coordinates", coordinates);
                 ev.put("addedDate", formatter.format(date));
-                reference.set(ev).addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
+                database.collection("events")
+                        .add(ev)
+                        .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                sharedPrefEditor.clear();
+                                sharedPrefEditor.commit();
 
-                        sharedPrefEditor.clear();
-                        sharedPrefEditor.commit();
+                                mEventName.setText("");
+                                mDateEvent.setText("");
+                                mTimeEvent.setText("");
+                                mTicketEvent.setChecked(false);
 
-                        mEventName.setText("");
-                        mDateEvent.setText("");
-                        mTimeEvent.setText("");
+                                Toast.makeText(AddEvent.this, "Wydarzenie zostało dodane",
+                                        Toast.LENGTH_SHORT).show();
 
-                        Toast.makeText(AddEvent.this, "Wydarzenie zostało dodane",
-                                Toast.LENGTH_SHORT).show();
-
-                        // @TODO jak będzie zrobiony details wydarzenia to tam przekierowywać
-                        startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                        finish();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(AddEvent.this, "Nie udało się dodać wydarzenia",
-                                Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onFailure:  " + e.toString());
-                    }
-                });
+                                Intent i = new Intent(getApplicationContext(), EditEvent.class);
+                                i.putExtra("eventId", documentReference.getId());
+                                startActivity(i);
+                            }
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(AddEvent.this, "Nie udało się zapisać wydarzenia, spróbuj ponownie",
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                        });
             }
         });
 
@@ -238,7 +238,9 @@ public class AddEvent extends AppCompatActivity {
         mAddEventElementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(), AddEventPlan.class));
+                Toast.makeText(AddEvent.this, "Najpierw zapisz wydarzenie",
+                        Toast.LENGTH_SHORT).show();
+                //startActivity(new Intent(getApplicationContext(), AddEventPlan.class));
             }
         });
     }
@@ -253,7 +255,6 @@ public class AddEvent extends AppCompatActivity {
         sharedPrefEditor.putString("eventTime", event.EventTime);
         sharedPrefEditor.putInt("eventTicket", event.Ticket);
         sharedPrefEditor.commit();
-        Log.d("SAVE STATE", "onpause ");
     }
 
     @Override
@@ -269,7 +270,6 @@ public class AddEvent extends AppCompatActivity {
         mDateEvent.setText(event.EventDate);
         mTimeEvent.setText(event.EventTime);
         mTicketEvent.setChecked(event.Ticket == 1 ? true : false);
-        Log.d("SAVE STATE", "onresume ");
     }
 
     private void getDataFromInput() {

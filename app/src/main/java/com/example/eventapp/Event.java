@@ -3,14 +3,14 @@ package com.example.eventapp;
 import java.io.Serializable;
 
 public class Event implements Serializable {
-    public String AuthorId, Coordinates, EventDate, EventTime, Name;
+    public String EventId, AuthorId, Coordinates, EventDate, EventTime, Name;
     public int Ticket;
 
     public Event() {
 
     }
 
-    public Event(String authorId, String coordinates, String eventDate, String eventTime,
+    public Event(String eventId, String authorId, String coordinates, String eventDate, String eventTime,
                  String name, int ticket) {
         AuthorId = authorId;
         Coordinates = coordinates;
@@ -18,6 +18,14 @@ public class Event implements Serializable {
         EventTime = eventTime;
         Name = name;
         Ticket = ticket;
+    }
+
+    public String getEventId() {
+        return EventId;
+    }
+
+    public void setEventId(String eventId) {
+        EventId = eventId;
     }
 
     public String getAuthorId() {

@@ -147,6 +147,12 @@ public class MappAddEvent extends FragmentActivity implements OnMapReadyCallback
 
     public void confirmMarker(View view) {
         Intent i = new Intent(this, AddEvent.class);
+
+        String actv = getIntent().getStringExtra("activity");
+        if (actv != null && actv.equals("EditEvent")) {
+            i = new Intent(this, EditEvent.class);
+        }
+
         i.putExtra("coordinates", actualLocation.latitude + ";" + actualLocation.longitude);
         startActivity(i);
     }
