@@ -1,6 +1,8 @@
 package com.example.eventapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -26,7 +28,6 @@ public class MainActivity extends AppCompatActivity {
     Button resendCode, changeProfileBtn, eventPanelBtn, showAllEventsBtn;
 
     User user;
-    AddEvent addEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,11 @@ public class MainActivity extends AppCompatActivity {
         eventPanelBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                SharedPreferences sharedPref = getSharedPreferences("event", Context.MODE_PRIVATE);
+                SharedPreferences.Editor sharedPrefEditor = sharedPref.edit();
+                sharedPrefEditor.clear();
+                sharedPrefEditor.commit();
+                
                 startActivity(new Intent(getApplicationContext(),AddEvent.class));
             }
         });

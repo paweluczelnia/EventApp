@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    tools:context=".AddEventPlan">
+    tools:context=".EditEventPlan">
 
     <TextView
         android:id="@+id/textView6"
@@ -13,7 +13,7 @@
         android:layout_height="44dp"
         android:layout_marginTop="72dp"
         android:fontFamily="@font/aclonica"
-        android:text="Dodaj plan wydarzenia"
+        android:text="Edytuj plan wydarzenia"
         android:textColor="#F352619F"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -91,42 +91,43 @@
         app:layout_constraintTop_toBottomOf="@+id/startTimeElement" />
 
     <Button
-        android:id="@+id/addAndExitBtn"
+        android:id="@+id/saveEventPlan"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:text="Dodaj element i wyjdź"
+        android:text="Zapisz"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/endTimeElement" />
-
     <Button
-        android:id="@+id/addAndAddNextBtn"
+        android:id="@+id/cancelEditPlan"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:text="Zapisz i dodaj kolejny element"
+        android:text="Anuluj zmiany"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addAndExitBtn"
+        app:layout_constraintTop_toBottomOf="@+id/saveEventPlan"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/cancelAddingPlan"
+        android:id="@+id/removeEventPlan"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="32dp"
-        android:text="Anuluj"
+        android:text="Usuń"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addAndAddNextBtn" />
+        app:layout_constraintTop_toBottomOf="@+id/cancelEditPlan"
+        app:layout_constraintVertical_bias="0.0" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

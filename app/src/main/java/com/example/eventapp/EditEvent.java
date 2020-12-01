@@ -240,10 +240,10 @@ public class EditEvent extends AppCompatActivity {
         mEditEventElementBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //@TODO przekierowanie do widoku z całą agendą
-                Toast.makeText(EditEvent.this, "Niedługo będzie działać, sorki",
-                        Toast.LENGTH_SHORT).show();
-                //startActivity(new Intent(getApplicationContext(), EditEventPlan.class));
+                Intent i = new Intent(getApplicationContext(), ShowEventPlans.class);
+                i.putExtra("eventId", event.EventId);
+                i.putExtra("eventName", event.Name);
+                startActivity(i);
             }
         });
     }
