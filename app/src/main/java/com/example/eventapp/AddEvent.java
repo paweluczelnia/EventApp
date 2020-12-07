@@ -187,7 +187,6 @@ public class AddEvent extends AppCompatActivity {
                 SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date date = new Date(System.currentTimeMillis());
 
-                // @TODO jak już będzie obsługa planu wydarzeń, to sam event do klasy, a w nim kolekcja z agendą i później foreach'em po niej i save do firebase
                 Map<String, Object> ev = new HashMap<>();
                 ev.put("name", event.Name);
                 ev.put("dataTime", event.EventDate + " " + event.EventTime);
@@ -240,7 +239,13 @@ public class AddEvent extends AppCompatActivity {
             public void onClick(View view) {
                 Toast.makeText(AddEvent.this, "Najpierw zapisz wydarzenie",
                         Toast.LENGTH_SHORT).show();
-                //startActivity(new Intent(getApplicationContext(), AddEventPlan.class));
+            }
+        });
+
+        mShowAllEventsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), ShowAllEvents.class));
             }
         });
     }

@@ -1,9 +1,17 @@
 package com.example.eventapp;
 
+import android.content.Context;
+import android.location.Address;
+import android.location.Geocoder;
+import android.util.Log;
+
+import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
+import java.util.Locale;
 
 public class Event implements Serializable {
-    public String EventId, AuthorId, Coordinates, EventDate, EventTime, Name;
+    public String Id, EventId, AuthorId, Coordinates, EventDate, EventTime, Name, LocationName;
     public int Ticket;
 
     public Event() {
@@ -19,6 +27,62 @@ public class Event implements Serializable {
         Name = name;
         Ticket = ticket;
     }
+
+    public void CalculateLocation(Context context, String coordinates)
+    {
+        Address address = getFullAddress(context, coordinates);
+        String addressLine = address.getAddressLine(0);
+        if (addressLine != null) {
+            String[] separatedAddress = addressLine.split(",");
+            addressLine = addressLine.replace(",", System.getProperty("line.separator"));
+            if (addressLine != null) {
+                this.LocationName = separatedAddress[0] + System.getProperty("line.separator")
+                        + separatedAddress[1];
+            }
+        }
+    }
+
+    public void LocationWithoutPostalCode(Context context, String coordinates)
+    {
+        Address address = getFullAddress(context, coordinates);
+        String addressLine = address.getAddressLine(0);
+        if (addressLine != null) {
+            String[] separatedAddress = addressLine.split(",");
+            addressLine = addressLine.replace(",", System.getProperty("line.separator"));
+            if (addressLine != null) {
+                this.LocationName = separatedAddress[0] + ", " + address.getLocality();
+            }
+        }
+    }
+
+    private Address getFullAddress(Context context, String coordinates)
+    {
+        String[] separatedCoords = coordinates.split(";");
+        Geocoder gcd = new Geocoder(context, Locale.getDefault());
+        List<Address> addresses = null;
+        try {
+            addresses = gcd.getFromLocation(Double.parseDouble(separatedCoords[0]),
+                    Double.parseDouble(separatedCoords[1]), 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (addresses != null)
+        {
+            Log.d("TAG", "ADDRESS: " + addresses.get(0));
+            return addresses.get(0);
+        }
+
+        return null;
+    }
+
+    //#region setters/getters
+    public String getLocationName() { return LocationName; }
+
+    public void setLocationName(String locationName) { LocationName = locationName; }
+
+    public String getId() { return Id; }
+
+    public void setId(String id) { Id = id; }
 
     public String getEventId() {
         return EventId;
@@ -75,4 +139,5 @@ public class Event implements Serializable {
     public void setTicket(int ticket) {
         Ticket = ticket;
     }
+    //#endregion
 }

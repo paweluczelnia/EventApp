@@ -76,7 +76,7 @@ public class EditEvent extends AppCompatActivity {
         //#endregion
         
         database = FirebaseFirestore.getInstance();
-        //#region odczyt edytowanego wydarzenia
+        //#region get edited event data
         String eventId = getIntent().getStringExtra("eventId");
         if (eventId != null) {
             DocumentReference docRef = database.collection("events").document(eventId);
