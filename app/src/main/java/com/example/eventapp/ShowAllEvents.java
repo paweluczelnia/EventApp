@@ -6,13 +6,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -22,16 +19,15 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
 
 public class ShowAllEvents extends AppCompatActivity {
     ListView eventsList;
     FirebaseFirestore database;
     ArrayList<Event> events;
+    Boolean favCheck = false;
+    CollectionReference favReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +38,7 @@ public class ShowAllEvents extends AppCompatActivity {
         events = new ArrayList<Event>();
 
         database = FirebaseFirestore.getInstance();
+        favReference = database.collection("favoriteList");
 
         //@TODO dodać warunek, żeby pokazywało tylko aktualne wydarzenia
         database.collection("events")
@@ -67,6 +64,9 @@ public class ShowAllEvents extends AppCompatActivity {
                         eventsAdapter.notifyDataSetChanged();
                         eventsList.setAdapter(eventsAdapter);
 
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                        String currentUserId = user.getUid();
+
                         // Edit plan
                         eventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
@@ -74,9 +74,9 @@ public class ShowAllEvents extends AppCompatActivity {
 
                                 Event ev = events.get(position);
                                 Log.d("TAG", "Clicked on " + ev.getId());
-                                /*Intent i = new Intent(getApplicationContext(), EventDetails.class);
+                                Intent i = new Intent(getApplicationContext(), ShowEvent.class);
                                 i.putExtra("eventId", ev.getId());
-                                startActivity(i);*/
+                                startActivity(i);
                             }
                         });
                     }

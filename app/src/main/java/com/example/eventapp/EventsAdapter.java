@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+
 import java.util.ArrayList;
 
 public class EventsAdapter extends ArrayAdapter<Event> {
-
     private ArrayList<Event> dataSet;
     Context context;
 
@@ -36,6 +36,8 @@ public class EventsAdapter extends ArrayAdapter<Event> {
         date.setText(ev.getEventDate());
         name.setText(ev.getName());
         location.setText(ev.getLocationName());
+
+
 
         return convertView;
     }
