@@ -6,28 +6,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import static android.widget.Toast.LENGTH_SHORT;
+
 public class ShowEvent extends AppCompatActivity {
     TextView evTitle, evLocation, evDate, evTime, evTicket,ticket;
     Button showAllEv, showPlan, goToEditEvent;
-    DatabaseReference databaseReference, favreference;
     FirebaseFirestore database;
-    Boolean favChecker = false;
     Event ev;
     Boolean isEventOwner = false;
-
+    ToggleButton favBtn;
+    String userID;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,7 +44,8 @@ public class ShowEvent extends AppCompatActivity {
         showAllEv = findViewById(R.id.shEvBackToAll);
         showPlan = findViewById(R.id.shEvShowPlanBtn);
         goToEditEvent = findViewById(R.id.goToEditEvent);
-
+        favBtn = findViewById(R.id.addToFavBtn);
+        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
         //#region get event data
         database = FirebaseFirestore.getInstance();
         String eventId = getIntent().getStringExtra("eventId");
@@ -61,6 +66,7 @@ public class ShowEvent extends AppCompatActivity {
                             ev.AuthorId = document.getString("authorId");
                             ev.EventDate = document.getString("dataTime").split(" ")[0];
                             ev.EventTime = document.getString("dataTime").split(" ")[1];
+
                             ev.EventId = eventId;
                             ev.CalculateLocation(getApplicationContext(), ev.Coordinates);
 
@@ -77,19 +83,18 @@ public class ShowEvent extends AppCompatActivity {
                             evTime.setText(ev.getEventTime());
 
                             // validate if auth user is event owner
-                            String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
                             if (userID.equals(ev.AuthorId)) {
                                 goToEditEvent.setVisibility(View.VISIBLE);
                                 isEventOwner = true;
                             }
                         } else {
                             Toast.makeText(ShowEvent.this, "Nie udało się pobrać wydarzenia",
-                                    Toast.LENGTH_SHORT).show();
+                                    LENGTH_SHORT).show();
                             redirect();
                         }
                     } else {
                         Toast.makeText(ShowEvent.this, "Nie udało się pobrać wydarzenia",
-                                Toast.LENGTH_SHORT).show();
+                                LENGTH_SHORT).show();
                         redirect();
                     }
                 }
@@ -98,6 +103,25 @@ public class ShowEvent extends AppCompatActivity {
         //#endregion
 
         //#region buttons listener
+
+        favBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Map<String, Object> fav = new HashMap<>();
+                if(favBtn.isChecked()) {
+                    DocumentReference documentReference = database.collection("favorites").document(userID);
+                    documentReference.update(eventId, FieldValue.arrayUnion(eventId));
+                    Toast.makeText(ShowEvent.this, "Dodano do ulubionych", LENGTH_SHORT).show();
+                }else{
+                    DocumentReference documentReference = database.collection("favorites").document(userID);
+                    fav.put(eventId, FieldValue.delete());
+                    documentReference.update(fav);
+                    Toast.makeText(ShowEvent.this, "Usunięto z ulubionych", LENGTH_SHORT).show();
+                }
+            }
+        });
+
         showAllEv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -126,8 +150,10 @@ public class ShowEvent extends AppCompatActivity {
         //#endregion
     }
 
+
     private void redirect() {
         startActivity(new Intent(getApplicationContext(), ShowAllEvents.class));
         finish();
     }
+
 }
