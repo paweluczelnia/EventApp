@@ -11,14 +11,14 @@ import java.util.List;
 import java.util.Locale;
 
 public class Event implements Serializable {
-    public String Id, EventId, AuthorId, Coordinates, EventDate, EventTime, Name, LocationName;
+    public String EventId, AuthorId, Coordinates, EventDate, EventTime, Name, LocationName;
     public int Ticket;
 
     public Event() {
 
     }
 
-    public Event(String eventId, String authorId, String coordinates, String eventDate, String eventTime,
+    public Event(String authorId, String coordinates, String eventDate, String eventTime,
                  String name, int ticket) {
         AuthorId = authorId;
         Coordinates = coordinates;
@@ -45,12 +45,14 @@ public class Event implements Serializable {
     public void LocationWithoutPostalCode(Context context, String coordinates)
     {
         Address address = getFullAddress(context, coordinates);
-        String addressLine = address.getAddressLine(0);
-        if (addressLine != null) {
-            String[] separatedAddress = addressLine.split(",");
-            addressLine = addressLine.replace(",", System.getProperty("line.separator"));
+        if (address != null) {
+            String addressLine = address.getAddressLine(0);
             if (addressLine != null) {
-                this.LocationName = separatedAddress[0] + ", " + address.getLocality();
+                String[] separatedAddress = addressLine.split(",");
+                addressLine = addressLine.replace(",", System.getProperty("line.separator"));
+                if (addressLine != null) {
+                    this.LocationName = separatedAddress[0] + ", " + address.getLocality();
+                }
             }
         }
     }
@@ -79,10 +81,6 @@ public class Event implements Serializable {
     public String getLocationName() { return LocationName; }
 
     public void setLocationName(String locationName) { LocationName = locationName; }
-
-    public String getId() { return Id; }
-
-    public void setId(String id) { Id = id; }
 
     public String getEventId() {
         return EventId;

@@ -246,6 +246,13 @@ public class EditEvent extends AppCompatActivity {
                 startActivity(i);
             }
         });
+
+        mShowAllEventsBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(),ShowAllEvents.class));
+            }
+        });
     }
 
     @Override

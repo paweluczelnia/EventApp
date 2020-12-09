@@ -26,8 +26,6 @@ public class ShowAllEvents extends AppCompatActivity {
     ListView eventsList;
     FirebaseFirestore database;
     ArrayList<Event> events;
-    Boolean favCheck = false;
-    CollectionReference favReference;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -38,7 +36,6 @@ public class ShowAllEvents extends AppCompatActivity {
         events = new ArrayList<Event>();
 
         database = FirebaseFirestore.getInstance();
-        favReference = database.collection("favoriteList");
 
         //@TODO dodać warunek, żeby pokazywało tylko aktualne wydarzenia
         database.collection("events")
@@ -54,7 +51,7 @@ public class ShowAllEvents extends AppCompatActivity {
                                 event.Name = snapshot.getString("name");
                                 event.EventDate = snapshot.getString("dataTime").split(" ")[0];
                                 event.EventTime = snapshot.getString("dataTime").split(" ")[1];
-                                event.Id = snapshot.getId();
+                                event.EventId = snapshot.getId();
                                 event.LocationWithoutPostalCode(getApplicationContext(), event.Coordinates);
                                 events.add(event);
                             }
@@ -64,18 +61,15 @@ public class ShowAllEvents extends AppCompatActivity {
                         eventsAdapter.notifyDataSetChanged();
                         eventsList.setAdapter(eventsAdapter);
 
-                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                        String currentUserId = user.getUid();
-
                         // Edit plan
                         eventsList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
                                 Event ev = events.get(position);
-                                Log.d("TAG", "Clicked on " + ev.getId());
+                                Log.d("TAG", "Clicked on " + ev.getEventId());
                                 Intent i = new Intent(getApplicationContext(), ShowEvent.class);
-                                i.putExtra("eventId", ev.getId());
+                                i.putExtra("eventId", ev.getEventId());
                                 startActivity(i);
                             }
                         });
