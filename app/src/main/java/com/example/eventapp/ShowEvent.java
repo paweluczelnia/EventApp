@@ -49,35 +49,25 @@ public class ShowEvent extends AppCompatActivity {
         //#region get event data
         database = FirebaseFirestore.getInstance();
         String eventId = getIntent().getStringExtra("eventId");
-//        CollectionReference collectionReference = database.collection("favorites");
-//        Query query = collectionReference.whereArrayContains(userID,eventId);
-//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-//            @Override
-//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-//                if(task.isSuccessful()){
-//                    favBtn.setChecked(true);
-//                }else{
-//                    favBtn.setChecked(false);
-//                }
-//            }
-//        });
-        DocumentReference docRefFav = database.collection("favorites").document(userID);
-        docRefFav.addSnapshotListener(this, (documentSnapshot, e) -> {
-            if (documentSnapshot.exists()) {
-                String evID = documentSnapshot.getId();
-                if(evID.equals(eventId)){
-                    favBtn.setChecked(true);
-                }else{
-                    favBtn.setChecked(false);
-                }
 
+        DocumentReference docRefFav = database.collection("favorites").document(userID);
+        docRefFav.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot documentFav = task.getResult();
+                    if(documentFav.exists()){
+                        String evId = documentFav.getString(eventId);
+//                        Toast.makeText(ShowEvent.this, evId, LENGTH_SHORT).show();
+                        favBtn.setChecked(true);
+                        if(evId == null){
+                            favBtn.setChecked(false);
+                        }
+                    }
+                }
             }
         });
-        if(docRefFav.equals(eventId)){
-            favBtn.setChecked(true);
-        }else{
-            favBtn.setChecked(false);
-        }
+
         if (eventId != null) {
             DocumentReference docRef = database.collection("events").document(eventId);
 
@@ -140,7 +130,7 @@ public class ShowEvent extends AppCompatActivity {
                 Map<String, Object> fav = new HashMap<>();
                 if(favBtn.isChecked()) {
                     DocumentReference documentReference = database.collection("favorites").document(userID);
-                    documentReference.update(eventId, FieldValue.arrayUnion(eventId));
+                    documentReference.update(eventId, userID);
                     Toast.makeText(ShowEvent.this, "Dodano do ulubionych", LENGTH_SHORT).show();
                 }else{
                     DocumentReference documentReference = database.collection("favorites").document(userID);
