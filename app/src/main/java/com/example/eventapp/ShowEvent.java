@@ -49,6 +49,35 @@ public class ShowEvent extends AppCompatActivity {
         //#region get event data
         database = FirebaseFirestore.getInstance();
         String eventId = getIntent().getStringExtra("eventId");
+//        CollectionReference collectionReference = database.collection("favorites");
+//        Query query = collectionReference.whereArrayContains(userID,eventId);
+//        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+//            @Override
+//            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+//                if(task.isSuccessful()){
+//                    favBtn.setChecked(true);
+//                }else{
+//                    favBtn.setChecked(false);
+//                }
+//            }
+//        });
+        DocumentReference docRefFav = database.collection("favorites").document(userID);
+        docRefFav.addSnapshotListener(this, (documentSnapshot, e) -> {
+            if (documentSnapshot.exists()) {
+                String evID = documentSnapshot.getId();
+                if(evID.equals(eventId)){
+                    favBtn.setChecked(true);
+                }else{
+                    favBtn.setChecked(false);
+                }
+
+            }
+        });
+        if(docRefFav.equals(eventId)){
+            favBtn.setChecked(true);
+        }else{
+            favBtn.setChecked(false);
+        }
         if (eventId != null) {
             DocumentReference docRef = database.collection("events").document(eventId);
 
