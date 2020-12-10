@@ -1,11 +1,7 @@
 package com.example.eventapp;
 
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class Register extends AppCompatActivity {
     EditText mNick, mEmail, mPassword, mConfirmPass, mPhone;
@@ -119,10 +118,14 @@ public class Register extends AppCompatActivity {
                             Toast.makeText(Register.this,"Utworzono nowe konto, możesz się zalogować", Toast.LENGTH_SHORT).show();
                             userID = fAuth.getCurrentUser().getUid();
                             DocumentReference documentReference = fStore.collection("users").document(userID);
+                            DocumentReference documentReferencefav = fStore.collection("favorites").document(userID);
+                            Map<String, Object> favo = new HashMap<>();
+                            favo.put("UserId", userID);
                             Map<String,Object> user = new HashMap<>();
                             user.put("nick",nick);
                             user.put("email",email);
                             user.put("phone",phone);
+                            documentReferencefav.set(favo);
                             documentReference.set(user).addOnSuccessListener((OnSuccessListener) (aVoid) ->{
                                     Log.d(TAG,"User profile is created for " + userID);
                             }).addOnFailureListener(new OnFailureListener() {

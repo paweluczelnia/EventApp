@@ -49,8 +49,10 @@ public class ShowEvent extends AppCompatActivity {
         //#region get event data
         database = FirebaseFirestore.getInstance();
         String eventId = getIntent().getStringExtra("eventId");
-
         DocumentReference docRefFav = database.collection("favorites").document(userID);
+        Map<String, Object> favori = new HashMap<>();
+        favori.put("UserId", FieldValue.delete());
+        docRefFav.update(favori);
         docRefFav.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
@@ -126,13 +128,14 @@ public class ShowEvent extends AppCompatActivity {
         favBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                Map<String, Object> fav = new HashMap<>();
+                database.collection("favorites").document(userID);
                 if(favBtn.isChecked()) {
+                    Map<String, Object> fav = new HashMap<>();
                     DocumentReference documentReference = database.collection("favorites").document(userID);
                     documentReference.update(eventId, userID);
                     Toast.makeText(ShowEvent.this, "Dodano do ulubionych", LENGTH_SHORT).show();
                 }else{
+                    Map<String, Object> fav = new HashMap<>();
                     DocumentReference documentReference = database.collection("favorites").document(userID);
                     fav.put(eventId, FieldValue.delete());
                     documentReference.update(fav);
