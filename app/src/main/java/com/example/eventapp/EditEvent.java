@@ -189,7 +189,9 @@ public class EditEvent extends AppCompatActivity {
 
                 SimpleDateFormat formatter= new SimpleDateFormat("yyyy-MM-dd HH:mm");
                 Date date = new Date(System.currentTimeMillis());
-
+                if (coordinatesFromMap != null) {
+                    event.Coordinates = coordinatesFromMap;
+                }
                 Map<String, Object> ev = new HashMap<>();
                 ev.put("name", event.Name);
                 ev.put("dataTime", event.EventDate + " " + event.EventTime);
@@ -230,6 +232,9 @@ public class EditEvent extends AppCompatActivity {
         mAddMapMarkerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if (coordinatesFromMap != null) {
+                    event.Coordinates = coordinatesFromMap;
+                }
                 Intent i = new Intent(getApplicationContext(), MappAddEvent.class);
                 i.putExtra("coordinates", event.Coordinates);
                 i.putExtra("activity", "EditEvent");

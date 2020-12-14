@@ -8,6 +8,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -24,7 +30,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import static android.widget.Toast.LENGTH_SHORT;
 
-public class ShowEvent extends AppCompatActivity {
+public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
     TextView evTitle, evLocation, evDate, evTime, evTicket,ticket;
     Button showAllEv, showPlan, goToEditEvent;
     FirebaseFirestore database;
@@ -32,6 +38,8 @@ public class ShowEvent extends AppCompatActivity {
     Boolean isEventOwner = false;
     ToggleButton favBtn;
     String userID;
+    private GoogleMap gMap;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,7 +53,12 @@ public class ShowEvent extends AppCompatActivity {
         showPlan = findViewById(R.id.shEvShowPlanBtn);
         goToEditEvent = findViewById(R.id.goToEditEvent);
         favBtn = findViewById(R.id.addToFavBtn);
-        String userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.map_location);
+        mapFragment.getMapAsync(this);
+
         //#region get event data
         database = FirebaseFirestore.getInstance();
         String eventId = getIntent().getStringExtra("eventId");
@@ -108,6 +121,9 @@ public class ShowEvent extends AppCompatActivity {
                                 goToEditEvent.setVisibility(View.VISIBLE);
                                 isEventOwner = true;
                             }
+
+                            // Set map marker
+                            updateMarker();
                         } else {
                             Toast.makeText(ShowEvent.this, "Nie udało się pobrać wydarzenia",
                                     LENGTH_SHORT).show();
@@ -178,4 +194,22 @@ public class ShowEvent extends AppCompatActivity {
         finish();
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        gMap = googleMap;
+        if (ev != null && ev.Coordinates != null) {
+            updateMarker();
+        }
+    }
+
+    private void updateMarker() {
+        String[] separatedCoords = ev.Coordinates.split(";");
+        LatLng latLng = new LatLng(Double.parseDouble(separatedCoords[0]),
+                Double.parseDouble(separatedCoords[1]));
+
+        MarkerOptions options = new MarkerOptions().position(latLng);
+        gMap.clear();
+        gMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 16));
+        gMap.addMarker(options);
+    }
 }

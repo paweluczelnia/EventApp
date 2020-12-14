@@ -12,16 +12,43 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="25dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/aclonica"
         android:text="Event name"
         android:textAlignment="center"
-        android:textSize="36sp"
+        android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/shEvLocation"
+        android:layout_width="357dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="32dp"
+        android:fontFamily="@font/aclonica"
+        android:text="Event location"
+        android:textAlignment="center"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shEvTitle" />
+
+    <fragment
+        android:id="@+id/map_location"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="250dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.536"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/shEvLocation" />
 
     <TextView
         android:id="@+id/shEvData"
@@ -33,11 +60,11 @@
         android:fontFamily="@font/aclonica"
         android:text="Event date"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shEvLocation" />
+        app:layout_constraintTop_toBottomOf="@+id/map_location" />
 
     <TextView
         android:id="@+id/shEvStartTime"
@@ -49,7 +76,7 @@
         android:fontFamily="@font/aclonica"
         android:text="Event time"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -65,40 +92,41 @@
         android:fontFamily="@font/aclonica"
         android:text="Ticketed"
         android:textAlignment="center"
-        android:textSize="24sp"
+        android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shEvStartTime" />
 
-    <TextView
-        android:id="@+id/shEvLocation"
-        android:layout_width="357dp"
-        android:layout_height="wrap_content"
+    <ToggleButton
+        android:id="@+id/addToFavBtn"
+        android:layout_width="50dp"
+        android:layout_height="55dp"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="32dp"
-        android:fontFamily="@font/aclonica"
-        android:text="Event location"
-        android:textAlignment="center"
-        android:textSize="24sp"
+        android:background="@drawable/toggle_selector"
+        android:textOff=""
+        android:textOn=""
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shEvTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/shEvTicket" />
 
     <Button
         android:id="@+id/shEvShowPlanBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
-        android:layout_marginTop="432dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="32dp"
         android:text="Pokaż plan"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/addToFavBtn"
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/shEvBackToAll"
@@ -126,22 +154,4 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shEvBackToAll" />
-
-    <ToggleButton
-        android:id="@+id/addToFavBtn"
-        android:layout_width="74dp"
-        android:layout_height="79dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/toggle_selector"
-        android:textOff=""
-        android:textOn=""
-        app:layout_constraintBottom_toTopOf="@+id/shEvShowPlanBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/shEvTicket"
-        app:layout_constraintVertical_bias="0.363" />
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
