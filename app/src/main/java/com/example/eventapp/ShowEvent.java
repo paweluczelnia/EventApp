@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -33,6 +34,7 @@ import static android.widget.Toast.LENGTH_SHORT;
 public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
     TextView evTitle, evLocation, evDate, evTime, evTicket,ticket;
     Button showAllEv, showPlan, goToEditEvent;
+    ProgressBar progressBar;
     FirebaseFirestore database;
     Event ev;
     Boolean isEventOwner = false;
@@ -44,6 +46,8 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_event);
+        progressBar = findViewById(R.id.progressBarEvDetails);
+        progressBar.setVisibility(View.VISIBLE);
         evTicket = findViewById(R.id.shEvTicket);
         evTitle = findViewById(R.id.shEvTitle);
         evLocation = findViewById(R.id.shEvLocation);
@@ -69,7 +73,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         docRefFav.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     DocumentSnapshot documentFav = task.getResult();
                     if(documentFav.exists()){
                         String evId = documentFav.getString(eventId);
@@ -124,6 +128,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
                             // Set map marker
                             updateMarker();
+                            progressBar.setVisibility(View.GONE);
                         } else {
                             Toast.makeText(ShowEvent.this, "Nie udało się pobrać wydarzenia",
                                     LENGTH_SHORT).show();
@@ -190,6 +195,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
 
     private void redirect() {
+        progressBar.setVisibility(View.GONE);
         startActivity(new Intent(getApplicationContext(), ShowAllEvents.class));
         finish();
     }

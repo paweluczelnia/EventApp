@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -25,6 +26,7 @@ public class ShowEventPlans extends AppCompatActivity {
     Button backToEditBtn, addPlan, backToEvent;
     String eventId, eventName;
     Boolean editMode = true;
+    ProgressBar progressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +35,8 @@ public class ShowEventPlans extends AppCompatActivity {
         backToEditBtn = findViewById(R.id.backToEdit);
         addPlan = findViewById(R.id.addEventPlan);
         backToEvent = findViewById(R.id.backToEvent);
+        progressBar = findViewById(R.id.progressBarEvPlans);
+        progressBar.setVisibility(View.VISIBLE);
 
         eventId = getIntent().getStringExtra("eventId");
         eventName = getIntent().getStringExtra("eventName");
@@ -78,6 +82,8 @@ public class ShowEventPlans extends AppCompatActivity {
                         EventPlanAdapter eventPlanAdapter = new EventPlanAdapter(agenda, getApplicationContext());
                         eventPlanAdapter.notifyDataSetChanged();
                         eventPlans.setAdapter(eventPlanAdapter);
+                        progressBar.setVisibility(View.GONE);
+
                         if (editMode) {
                             // Edit plan
                             eventPlans.setOnItemClickListener(new AdapterView.OnItemClickListener() {

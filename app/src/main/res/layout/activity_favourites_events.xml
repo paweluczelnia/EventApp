@@ -6,21 +6,21 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@drawable/background"
-    tools:context=".ShowEventPlans">
+    tools:context=".FavouritesEvents">
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:padding="5dp" >
 
         <TextView
-            android:id="@+id/eventName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
-            android:text="Event Name"
+            android:text="Ulubione wydarzenia"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textStyle="bold" />
+
     </RelativeLayout>
 
     <LinearLayout
@@ -28,7 +28,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
         <ProgressBar
-            android:id="@+id/progressBarEvPlans"
+            android:id="@+id/progressBarFavEvents"
             style="?android:attr/progressBarStyle"
             android:layout_width="match_parent"
             android:layout_height="50dp"
@@ -37,45 +37,24 @@
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+            android:id="@+id/noFav"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Nie masz ulubionych wydarzeń"
+            android:visibility="gone"
+            android:textAlignment="center" />
+
+
         <ListView
-            android:id="@+id/eventplans"
+            android:id="@+id/favouritesList"
             android:layout_width="match_parent"
             android:layout_height="0dip"
             android:layout_alignParentTop="true"
             android:layout_weight="1">
 
         </ListView>
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:padding="5dp">
-
-            <Button
-                android:id="@+id/backToEdit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wróć do edycji"
-                android:layout_alignParentLeft="true"
-                android:layout_marginLeft="10dp"/>
-
-            <Button
-                android:id="@+id/addEventPlan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Dodaj nowy punkt"
-                android:layout_alignParentRight="true"
-                android:layout_marginRight="10dp"/>
-
-            <Button
-                android:id="@+id/backToEvent"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Wróć do wydarzenia"
-                android:layout_centerInParent="true"
-                android:visibility="gone" />
-
-        </RelativeLayout>
     </LinearLayout>
 
 </LinearLayout>

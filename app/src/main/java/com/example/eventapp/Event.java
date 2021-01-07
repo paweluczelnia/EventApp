@@ -31,13 +31,15 @@ public class Event implements Serializable {
     public void CalculateLocation(Context context, String coordinates)
     {
         Address address = getFullAddress(context, coordinates);
-        String addressLine = address.getAddressLine(0);
-        if (addressLine != null) {
-            String[] separatedAddress = addressLine.split(",");
-            addressLine = addressLine.replace(",", System.getProperty("line.separator"));
+        if (address != null) {
+            String addressLine = address.getAddressLine(0);
             if (addressLine != null) {
-                this.LocationName = separatedAddress[0] + System.getProperty("line.separator")
-                        + separatedAddress[1];
+                String[] separatedAddress = addressLine.split(",");
+                addressLine = addressLine.replace(",", System.getProperty("line.separator"));
+                if (addressLine != null) {
+                    this.LocationName = separatedAddress[0] + System.getProperty("line.separator")
+                            + separatedAddress[1];
+                }
             }
         }
     }

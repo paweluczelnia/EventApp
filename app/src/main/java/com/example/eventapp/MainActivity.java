@@ -139,16 +139,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 startActivity(new Intent(getApplicationContext(), ShowAllEvents.class));
                 break;
             case R.id.ic_person:
-                startActivity(new Intent(getApplicationContext(),MainActivity.class));
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 break;
             case R.id.ic_add:
-                startActivity(new Intent(getApplicationContext(),AddEvent.class));
+                startActivity(new Intent(getApplicationContext(), AddEvent.class));
                 break;
             case R.id.ic_settings:
-                startActivity(new Intent(getApplicationContext(),EditProfile.class));
+                startActivity(new Intent(getApplicationContext(), EditProfile.class));
                 break;
             case R.id.ic_favourite:
-
+                startActivity(new Intent(getApplicationContext(), FavouritesEvents.class));
                 break;
         }
         return true;

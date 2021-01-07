@@ -6,7 +6,16 @@
     android:layout_height="match_parent"
     android:background="@drawable/background"
     tools:context=".ShowEvent">
-
+    <ProgressBar
+        android:id="@+id/progressBarEvDetails"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_centerInParent="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
     <TextView
         android:id="@+id/shEvTitle"
         android:layout_width="0dp"
@@ -15,7 +24,6 @@
         android:layout_marginTop="25dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/aclonica"
-        android:text="Event name"
         android:textAlignment="center"
         android:textSize="32sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -31,7 +39,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/aclonica"
-        android:text="Event location"
         android:textAlignment="center"
         android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -58,7 +65,6 @@
         android:layout_marginTop="20dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/aclonica"
-        android:text="Event date"
         android:textAlignment="center"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +80,6 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/aclonica"
-        android:text="Event time"
         android:textAlignment="center"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -90,7 +95,6 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="32dp"
         android:fontFamily="@font/aclonica"
-        android:text="Ticketed"
         android:textAlignment="center"
         android:textSize="15sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -154,4 +158,5 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/shEvBackToAll" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
