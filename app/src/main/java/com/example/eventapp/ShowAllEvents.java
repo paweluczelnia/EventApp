@@ -43,7 +43,7 @@ public class ShowAllEvents extends AppCompatActivity{
         database = FirebaseFirestore.getInstance();
 
         database.collection("events")
-                .orderBy("dataTime", Query.Direction.DESCENDING)
+                .orderBy("dataTime", Query.Direction.ASCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
