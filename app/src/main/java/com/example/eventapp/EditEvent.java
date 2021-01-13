@@ -34,7 +34,6 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -53,13 +52,11 @@ public class EditEvent extends AppCompatActivity {
     SharedPreferences.Editor sharedPrefEditor;
 
     Event event;
-    Calendar cldr;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        cldr = Calendar.getInstance(new Locale("pl"));
         event = new Event();
 
         setContentView(R.layout.activity_edit_event);
@@ -115,52 +112,6 @@ public class EditEvent extends AppCompatActivity {
         sharedPref = getSharedPreferences("event", Context.MODE_PRIVATE);
         sharedPrefEditor = sharedPref.edit();
 
-        //#region datePicker on EditText
-        mDateEvent.setInputType(InputType.TYPE_NULL);
-        mDateEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int day = cldr.get(Calendar.DAY_OF_MONTH);
-                int month = cldr.get(Calendar.MONTH);
-                int year = cldr.get(Calendar.YEAR);
-                // date picker dialog
-                DatePickerDialog picker = new DatePickerDialog(EditEvent.this,
-                        new DatePickerDialog.OnDateSetListener() {
-                            @Override
-                            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-                                cldr.set(year, monthOfYear, dayOfMonth);
-                                SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                                String strDate = format.format(cldr.getTime());
-                                mDateEvent.setText(strDate);
-                            }
-                        }, year, month, day);
-                picker.show();
-            }
-        });
-        //#endregion
-
-        //#region timePicker on EditText
-        mTimeEvent.setInputType(InputType.TYPE_NULL);
-        mTimeEvent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                int hour = cldr.get(Calendar.HOUR_OF_DAY);
-                int minutes = cldr.get(Calendar.MINUTE);
-                // time picker dialog
-                TimePickerDialog picker = new TimePickerDialog(EditEvent.this,
-                        new TimePickerDialog.OnTimeSetListener() {
-                            @Override
-                            public void onTimeSet(TimePicker tp, int sHour, int sMinute) {
-                                cldr.set(Calendar.HOUR_OF_DAY, sHour);
-                                cldr.set(Calendar.MINUTE, sMinute);
-                                mTimeEvent.setText(String.format("%02d:%02d", sHour, sMinute));
-                            }
-                        }, hour, minutes, true);
-                picker.show();
-            }
-        });
-        //#endregion
         fAuth = FirebaseAuth.getInstance();
 
         // Check coordinates from map exists
@@ -214,9 +165,9 @@ public class EditEvent extends AppCompatActivity {
                                 Toast.makeText(EditEvent.this, "Wydarzenie zostało zapisane",
                                         Toast.LENGTH_SHORT).show();
 
-                                // @TODO jak będzie zrobiony details wydarzenia to tam przekierowywać
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                finish();
+                                Intent i = new Intent(getApplicationContext(), ShowEvent.class);
+                                i.putExtra("eventId", event.EventId);
+                                startActivity(i);
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
@@ -305,19 +256,6 @@ public class EditEvent extends AppCompatActivity {
         mDateEvent.setText(event.EventDate);
         mTimeEvent.setText(event.EventTime);
         mTicketEvent.setChecked(event.Ticket == 1 ? true : false);
-
-        // split date and time to update calendar
-        if (event.EventDate != null && !event.EventDate.trim().isEmpty()) {
-            String[] date = event.EventDate.split("-");
-            cldr.set(Integer.parseInt(date[0]), Integer.parseInt(date[1]) - 1,
-                    Integer.parseInt(date[2]));
-        }
-
-        if (event.EventTime != null && !event.EventTime.trim().isEmpty()) {
-            String[] time = event.EventTime.split(":");
-            cldr.set(Calendar.HOUR, Integer.parseInt(time[0]));
-            cldr.set(Calendar.MINUTE, Integer.parseInt(time[1]));
-        }
     }
     private void redirect() {
         startActivity(new Intent(getApplicationContext(), MainActivity.class));

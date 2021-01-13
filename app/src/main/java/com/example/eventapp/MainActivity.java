@@ -34,7 +34,7 @@ import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     final int callbackId = 42;
 
-    TextView nick,email,phone, verifyMsg;
+    TextView nick,email,phone, verifyMsg, headerName;
     FirebaseAuth fAuth;
     FirebaseFirestore fStore;
     String userId;
@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         phone = findViewById(R.id.profileNumber);
         nick = findViewById(R.id.profilName);
         email = findViewById(R.id.profileEmail);
+
 
         changeProfileBtn = findViewById(R.id.changeProfile);
 
@@ -88,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 phone.setText(Uphone);
                 nick.setText(Ulogin);
                 email.setText(Uemail);
+                headerName = findViewById(R.id.headerName);
+                headerName.setText(Ulogin);
             }
         });
 

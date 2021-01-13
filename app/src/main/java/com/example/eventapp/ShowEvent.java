@@ -1,6 +1,5 @@
 package com.example.eventapp;
 
-import android.Manifest;
 import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -11,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.CalendarContract;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -32,21 +30,21 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TimeZone;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 
-import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 import static android.widget.Toast.LENGTH_SHORT;
 
 public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
@@ -60,6 +58,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
     String userID;
     private GoogleMap gMap;
     Long eventCalendarId = null;
+    String endTime = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,16 +72,18 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         evDate = findViewById(R.id.shEvData);
         evTime = findViewById(R.id.shEvStartTime);
         showAllEv = findViewById(R.id.shEvBackToAll);
+        showAllEv.setVisibility(View.GONE);
         showPlan = findViewById(R.id.shEvShowPlanBtn);
+        showPlan.setVisibility(View.GONE);
         goToEditEvent = findViewById(R.id.goToEditEvent);
         favBtn = findViewById(R.id.addToFavBtn);
+        favBtn.setVisibility(View.GONE);
         userID = FirebaseAuth.getInstance().getCurrentUser().getUid();
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map_location);
         mapFragment.getMapAsync(this);
-        Integer calId = getCalendarId(getApplicationContext());
-        Log.d("FAV", "calendar ID " + calId);
+
         //#region get event data
         database = FirebaseFirestore.getInstance();
         String eventId = getIntent().getStringExtra("eventId");
@@ -95,9 +96,8 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 if (task.isSuccessful()) {
                     DocumentSnapshot documentFav = task.getResult();
-                    if(documentFav.exists()){
-                        Long eventCalendarId = documentFav.getLong(eventId);
-                        Log.e("FAV", "calendar id from database " + eventCalendarId);
+                    if (documentFav.exists()) {
+                        eventCalendarId = documentFav.getLong(eventId);
                         favBtn.setChecked(true);
                         if (eventCalendarId == null) {
                             favBtn.setChecked(false);
@@ -108,6 +108,22 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         });
 
         if (eventId != null) {
+            // get last end time from event's plans
+            database.collection("eventsPlans").whereEqualTo("eventId", eventId)
+                    .orderBy("endTime", Query.Direction.DESCENDING).limit(1).get()
+                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        List<String> plans = new ArrayList<>();
+                        List<DocumentSnapshot> ds = task.getResult().getDocuments();
+                        if (ds.size() > 0) {
+                            endTime = task.getResult().getDocuments().get(0).getString("endTime");
+                        }
+                    }
+                }
+            });
+
             DocumentReference docRef = database.collection("events").document(eventId);
 
             docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -149,6 +165,9 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
                             // Set map marker
                             updateMarker();
                             progressBar.setVisibility(View.GONE);
+                            showAllEv.setVisibility(View.VISIBLE);
+                            showPlan.setVisibility(View.VISIBLE);
+                            favBtn.setVisibility(View.VISIBLE);
                         } else {
                             Toast.makeText(ShowEvent.this, "Nie udało się pobrać wydarzenia",
                                     LENGTH_SHORT).show();
@@ -167,23 +186,17 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
         //#region buttons listener
 
         favBtn.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 database.collection("favorites").document(userID);
                 if (favBtn.isChecked()) {
-                    //#region add calendar event with reminder
-                    // dodać pobieranie ostatniego punktu wydarzenia
-                    // jeśłi nie ma to end = start + 1h
-                    //jeśli wydarzenie rozpocznie się za mniej niż za 24h to pokazujemy przypomnienie za 2 minuty, a jeśłi nie to 24h przed rozpoczęciem
-
-                    Log.d("FAV", "date " + ev.getEventDate() + " " + ev.getEventTime());
                     ContentResolver cr = getContentResolver();
                     ContentValues values = new ContentValues();
 
-                    Log.d("FAV", "tiemzone " + TimeZone.getDefault().getID());
                     Integer calId = getCalendarId(getApplicationContext());
-                    Log.e("FAV", "calendar ID " + calId);
-                    //
+
+                    //#region calculate event datetime
                     String[] date = ev.getEventDate().split("-");
                     Integer year = Integer.parseInt(date[0]);
                     Integer month = Integer.parseInt(date[1]) - 1;
@@ -195,9 +208,26 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
                     Calendar beginTime = Calendar.getInstance();
                     beginTime.set(year, month, day, hour, minute);
                     long startMillis = beginTime.getTimeInMillis();
+
+                    Integer calculatedEndHour = hour + 1;
+                    Integer calculatedEndMinute = minute;
+
+                    if (endTime != null) {
+                        LocalTime start = LocalTime.parse(ev.getEventTime());
+                        LocalTime end = LocalTime.parse(endTime);
+
+                        if (end.isAfter(start)) {
+                            String[] splitedEndTime = endTime.split(":");
+                            calculatedEndHour = Integer.parseInt(splitedEndTime[0]);
+                            calculatedEndMinute = Integer.parseInt(splitedEndTime[1]);
+                        }
+                    }
+
                     Calendar endTime = Calendar.getInstance();
-                    endTime.set(year, month, day, hour + 1, minute);
+                    endTime.set(year, month, day, calculatedEndHour, calculatedEndMinute);
                     long endMillis = endTime.getTimeInMillis();
+
+                    //#endregion
                     values.put(CalendarContract.Events.DTSTART, startMillis);
                     values.put(CalendarContract.Events.DTEND, endMillis);
                     values.put(CalendarContract.Events.TITLE, ev.getName());
@@ -208,20 +238,41 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
 
                     // get the event ID that is the last element in the Uri
                     eventCalendarId = Long.parseLong(uri.getLastPathSegment());
-                    Log.e("FAV", "eventID " + eventCalendarId);
+
+                    // add reminder
+                    Integer reminderMinutes = 60*24; // 24h
+                    Long currentTime = System.currentTimeMillis();
+                    Long difference = startMillis - currentTime;
+                    if (difference <= 60 * 60 * 1000 * 24) {
+                        int hours = (int) ((difference / (1000*60*60)) % 24);
+                        if (hours - 1 > 1) {
+                            reminderMinutes = (hours - 1) * 60;
+                        } else {
+                            int minutes = (int) ((difference / (1000 * 60)) % 60);
+
+                            if (minutes - 5 > 5) {
+                                reminderMinutes = minutes - 5;
+                            } else {
+                                reminderMinutes = minutes;
+                            }
+                        }
+                    }
+
+                    ContentValues valuesR = new ContentValues();
+                    valuesR.put(CalendarContract.Reminders.MINUTES, reminderMinutes);
+                    valuesR.put(CalendarContract.Reminders.EVENT_ID, eventCalendarId);
+                    valuesR.put(CalendarContract.Reminders.METHOD, CalendarContract.Reminders.METHOD_ALERT);
+                    Uri uriR = cr.insert(CalendarContract.Reminders.CONTENT_URI, valuesR);
                     //#endregion
-                    Map<String, Object> fav = new HashMap<>();
                     DocumentReference documentReference = database.collection("favorites").document(userID);
                     documentReference.update(eventId, eventCalendarId);
                     Toast.makeText(ShowEvent.this, "Dodano do ulubionych", LENGTH_SHORT).show();
                 } else {
-                    Log.e("FAV", "eventCalendarId " + eventCalendarId);
                     if (eventCalendarId != null) {
                         ContentResolver cr = getContentResolver();
                         Uri deleteUri = null;
                         deleteUri = ContentUris.withAppendedId(CalendarContract.Events.CONTENT_URI, eventCalendarId);
                         int rows = cr.delete(deleteUri, null, null);
-                        Log.d("FAV", "Rows deleted: " + rows);
                     }
 
                     Map<String, Object> fav = new HashMap<>();
@@ -318,10 +369,9 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
                 calName = cursor.getString(PROJECTION_DISPLAY_NAME_INDEX);
                 calId = cursor.getLong(PROJECTION_ID_INDEX);
                 visible = cursor.getString(PROJECTION_VISIBLE);
-                if(visible.equals("1")){
+                if (visible.equals("1")){
                     return (int)calId;
                 }
-                Log.e("Calendar Id : ", "" + calId + " : " + calName + " : " + visible);
             } while (cursor.moveToNext());
 
             return (int)calId;
