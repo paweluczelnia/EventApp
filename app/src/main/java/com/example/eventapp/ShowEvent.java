@@ -369,7 +369,7 @@ public class ShowEvent extends AppCompatActivity implements OnMapReadyCallback {
                 calName = cursor.getString(PROJECTION_DISPLAY_NAME_INDEX);
                 calId = cursor.getLong(PROJECTION_ID_INDEX);
                 visible = cursor.getString(PROJECTION_VISIBLE);
-                if (visible.equals("1")){
+                if (visible != null){
                     return (int)calId;
                 }
             } while (cursor.moveToNext());

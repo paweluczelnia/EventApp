@@ -89,31 +89,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 tools:ignore="MissingConstraints" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="127dp"
-                android:layout_height="127dp"
-                android:src="@drawable/billie"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.144"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.445" />
-
-            <TextView
-                android:id="@+id/profileNumber"
-                android:layout_width="137dp"
-                android:layout_height="38dp"
-                android:layout_marginTop="16dp"
-                android:text="TextView"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.748"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profileEmail"
-                app:layout_constraintVertical_bias="0.038" />
-
             <TextView
                 android:id="@+id/text"
                 android:layout_width="wrap_content"
@@ -145,26 +120,39 @@
                 tools:layout_editor_absoluteX="-8dp" />
 
             <TextView
+                android:id="@+id/profileEmail"
+                android:layout_width="204dp"
+                android:layout_height="41dp"
+                android:layout_marginTop="32dp"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.71"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/profilName" />
+
+            <TextView
                 android:id="@+id/profilName"
                 android:layout_width="136dp"
                 android:layout_height="39dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="52dp"
                 android:text="TextView"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.749"
+                app:layout_constraintHorizontal_bias="0.53"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/text" />
 
             <TextView
-                android:id="@+id/profileEmail"
-                android:layout_width="204dp"
-                android:layout_height="41dp"
+                android:id="@+id/profileNumber"
+                android:layout_width="137dp"
+                android:layout_height="38dp"
                 android:layout_marginTop="16dp"
                 android:text="TextView"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintHorizontal_bias="0.529"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/profilName" />
+                app:layout_constraintTop_toBottomOf="@+id/profileEmail"
+                app:layout_constraintVertical_bias="0.0" />
 
             <Button
                 android:id="@+id/addEventPanel"
