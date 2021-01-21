@@ -3,7 +3,6 @@ package com.example.eventapp;
 import android.content.Context;
 import android.location.Address;
 import android.location.Geocoder;
-import android.util.Log;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -72,7 +71,6 @@ public class Event implements Serializable {
         }
         if (addresses != null)
         {
-            Log.d("TAG", "ADDRESS: " + addresses.get(0));
             return addresses.get(0);
         }
 

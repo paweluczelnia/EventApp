@@ -27,7 +27,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static android.widget.Toast.LENGTH_SHORT;
 import static com.google.common.collect.Iterables.size;
 
 public class FavouritesEvents extends AppCompatActivity {

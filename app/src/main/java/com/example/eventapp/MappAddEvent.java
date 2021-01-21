@@ -49,11 +49,9 @@ public class MappAddEvent extends FragmentActivity implements OnMapReadyCallback
         }
 
         setContentView(R.layout.activity_mapp_add_event);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
         mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
 
-        // Initialize fused location
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         mapFragment.getMapAsync(this);
@@ -67,7 +65,6 @@ public class MappAddEvent extends FragmentActivity implements OnMapReadyCallback
             getLocationPermission();
         }
 
-        // Get the current location of the device and set the position of the map.
         getDeviceLocation();
 
         gMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -99,7 +96,7 @@ public class MappAddEvent extends FragmentActivity implements OnMapReadyCallback
         locationPermissionGranted = false;
         switch (requestCode) {
             case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
+
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     locationPermissionGranted = true;

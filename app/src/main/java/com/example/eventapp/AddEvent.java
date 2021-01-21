@@ -101,7 +101,6 @@ public class AddEvent extends AppCompatActivity {
                                 cldr.set(year, monthOfYear, dayOfMonth);
                                 SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
                                 String strDate = format.format(cldr.getTime());
-                                //mDateEvent.setText(year + "-" + (monthOfYear + 1) + "-" +  dayOfMonth);
                                 mDateEvent.setText(strDate);
                             }
                         }, year, month, day);
@@ -250,7 +249,7 @@ public class AddEvent extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         getDataFromInput();
-        //@TODO obczaić jak to fajnie przerobić żeby zapisywać obiekt
+
         sharedPrefEditor.putString("eventName", event.Name);
         sharedPrefEditor.putString("eventDate", event.EventDate);
         sharedPrefEditor.putString("eventTime", event.EventTime);

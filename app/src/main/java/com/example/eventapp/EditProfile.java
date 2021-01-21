@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,7 +22,6 @@ import java.util.Map;
 
 public class EditProfile extends AppCompatActivity {
 
-    public static final String TAG = "TAG";
     public User user;
 
     FirebaseAuth fAuth;
@@ -89,7 +87,6 @@ public class EditProfile extends AppCompatActivity {
                 });
             }
         });
-
 
         cancelEditProfileBtn.setOnClickListener(v -> {
             startActivity(new Intent(v.getContext(), MainActivity.class));
